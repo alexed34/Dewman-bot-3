@@ -8,9 +8,7 @@ load_dotenv()
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
     """Заполняем тренировочные фразы в dialogflow"""
-
     intents_client = dialogflow.IntentsClient()
-
     parent = dialogflow.AgentsClient.agent_path(project_id)
     training_phrases = []
     for training_phrases_part in training_phrases_parts:
@@ -21,12 +19,8 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     message_texts = {message_texts}
     text = dialogflow.Intent.Message.Text(text=message_texts)
     message = dialogflow.Intent.Message(text=text)
-    intent = dialogflow.Intent(
-        display_name=display_name, training_phrases=training_phrases, messages=[message]
-    )
-    response = intents_client.create_intent(
-        request={"parent": parent, "intent": intent}
-    )
+    intent = dialogflow.Intent(display_name=display_name, training_phrases=training_phrases, messages=[message])
+    response = intents_client.create_intent(request={"parent": parent, "intent": intent})
     print("Intent created: {}".format(response))
 
 
