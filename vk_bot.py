@@ -24,7 +24,8 @@ def main():
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             text = detect_intent_texts(event.text)
-            send_message(event, vk_api, text)
+            if text != 'Я не понимаю о чём речь':
+                send_message(event, vk_api, text)
 
 
 if __name__ == '__main__':
