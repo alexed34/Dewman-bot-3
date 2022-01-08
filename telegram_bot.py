@@ -1,21 +1,18 @@
 import json
 import os
-import logging
-from telegram import Update
-from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
+from loger import logger
 from dotenv import load_dotenv
 from google.cloud import dialogflow
+from telegram import Update
+from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 
 load_dotenv()
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
-logger = logging.getLogger(__name__)
 
 def dialogflow_bot(update: Update, context: CallbackContext):
     text = detect_intent_texts(update.message.text)
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+
 
 def detect_intent_texts(text):
     """Returns the result of detect intent with texts as inputs.
@@ -39,11 +36,15 @@ def detect_intent_texts(text):
 
 def main():
     token = os.getenv('TOKEN')
-    updater = Updater(token=token, use_context=True)
-    dispatcher = updater.dispatcher
-    dialogflow_bot_handler = MessageHandler(Filters.text & (~Filters.command), dialogflow_bot)
-    dispatcher.add_handler(dialogflow_bot_handler)
-    updater.start_polling()
+    try:
+        updater = Updater(token=token, use_context=True)
+        dispatcher = updater.dispatcher
+        dialogflow_bot_handler = MessageHandler(Filters.text & (~Filters.command), dialogflow_bot)
+        dispatcher.add_handler(dialogflow_bot_handler)
+        updater.start_polling()
+        logger.info('start telegram bot')
+    except Exception as ex:
+        logger.warning(ex)
 
 
 if __name__ == '__main__':
