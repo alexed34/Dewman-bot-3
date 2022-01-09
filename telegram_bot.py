@@ -1,12 +1,15 @@
 import json
-import os
+import logging
 from loger import logger
+import os
 from dotenv import load_dotenv
 from google.cloud import dialogflow
 from telegram import Update
 from telegram.ext import Updater, MessageHandler, Filters, CallbackContext
 
 load_dotenv()
+
+logger = logging.getLogger('bot_loger')
 
 
 def dialogflow_bot(update: Update, context: CallbackContext):
@@ -16,7 +19,6 @@ def dialogflow_bot(update: Update, context: CallbackContext):
 
 def detect_intent_texts(text):
     """Returns the result of detect intent with texts as inputs.
-
     Using the same `session_id` between requests allows continuation
     of the conversation."""
     session_client = dialogflow.SessionsClient()

@@ -35,7 +35,7 @@ handler_file.setFormatter(logging.Formatter(f"%(asctime)s - %(process)d - %(leve
 chat_id = os.getenv('CHAT_ID')
 token = os.getenv('TOKEN')
 hahdler_telegram = TelegramLogsHandler(Bot(token), chat_id)
-hahdler_telegram.setLevel(logging.INFO)
+hahdler_telegram.setLevel(logging.WARNING)
 hahdler_telegram.setFormatter(logging.Formatter(f"%(asctime)s - %(process)d - %(levelname)s - %(message)s"))
 
 
