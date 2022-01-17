@@ -34,8 +34,10 @@ def main():
         longpoll = VkLongPoll(vk_session)
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                text = detect_intent_texts(event.text, path_json_config)
-                send_message(event, vk_api_method, text)
+                response = detect_intent_texts(event.text, path_json_config)
+                if not response.intent.is_fallback:
+                    text = response.fulfillment_text
+                    send_message(event, vk_api_method, text)
     except Exception as ex:
         logger.warning(ex)
 

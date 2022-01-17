@@ -9,7 +9,8 @@ from general_functions import TelegramLogsHandler, detect_intent_texts
 
 
 def send_message_telegtam(update: Update, context: CallbackContext, ):
-    text = detect_intent_texts(update.message.text, path_json_config)
+    response = detect_intent_texts(update.message.text, path_json_config)
+    text = response.fulfillment_text
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
 

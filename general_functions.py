@@ -27,9 +27,5 @@ def detect_intent_texts(text, path_json_config=None):
     text_input = dialogflow.TextInput(text=text, language_code='ru-RU')
     query_input = dialogflow.QueryInput(text=text_input)
     response = session_client.detect_intent(
-        request={"session": session, "query_input": query_input}
-    )
-    if not response.query_result.intent.is_fallback:
-        return response.query_result.fulfillment_text
-    else:
-        return 'Я не понимаю о чём речь'
+        request={"session": session, "query_input": query_input})
+    return response.query_result
