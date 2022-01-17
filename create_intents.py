@@ -1,9 +1,7 @@
 import json
 import os
-from dotenv import load_dotenv
 from google.cloud import dialogflow
-
-load_dotenv()
+from dotenv import load_dotenv
 
 
 def create_intent(project_id, display_name, training_phrases_parts, message_texts):
@@ -20,30 +18,27 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
     text = dialogflow.Intent.Message.Text(text=message_texts)
     message = dialogflow.Intent.Message(text=text)
     intent = dialogflow.Intent(display_name=display_name, training_phrases=training_phrases, messages=[message])
-    response = intents_client.create_intent(request={"parent": parent, "intent": intent})
-    print("Intent created: {}".format(response))
+    intents_client.create_intent(request={"parent": parent, "intent": intent})
 
 
-def writer_json(path_json):
+def read_json(path_json):
     with open(path_json, 'r', encoding='utf-8') as f:
         text_json = json.load(f)
     return text_json
 
 
 def main():
-    path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
     path_json_intent = 'questions.json'
+    training_phrases = read_json(path_json_intent)
+    project_id = read_json(path_json_config)['project_id']
 
-    training_phrases = writer_json(path_json_intent)
-    project_id = writer_json(path_json_config)['project_id']
-
-    for key in training_phrases.keys():
-        display_name = key
-        training_phrases_parts = training_phrases[key]['questions']
-        message_texts = (training_phrases[key]['answer'])
-        create_intent(project_id, display_name, training_phrases_parts, message_texts)
-        break
+    for phrase, examples in training_phrases.items():
+        questions_for_phrase = examples['questions']
+        answer_for_phrase = examples['answer']
+        create_intent(project_id, phrase, questions_for_phrase, answer_for_phrase)
 
 
 if __name__ == '__main__':
+    load_dotenv()
+    path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
     main()
