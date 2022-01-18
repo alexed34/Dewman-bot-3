@@ -23,11 +23,12 @@ def create_intent(project_id, display_name, training_phrases_parts, message_text
 
 def read_json(path_json):
     with open(path_json, 'r', encoding='utf-8') as f:
-        text_json = json.load(f)
-    return text_json
+        return json.load(f)
 
 
 def main():
+    load_dotenv()
+    path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
     path_json_intent = 'questions.json'
     training_phrases = read_json(path_json_intent)
     project_id = read_json(path_json_config)['project_id']
@@ -39,6 +40,4 @@ def main():
 
 
 if __name__ == '__main__':
-    load_dotenv()
-    path_json_config = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
     main()
