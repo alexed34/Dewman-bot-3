@@ -1,4 +1,1 @@
-print('hello')
-print('hello')
-print('hello')
-print('test')
+n = 2
